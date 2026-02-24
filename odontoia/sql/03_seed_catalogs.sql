@@ -7,19 +7,6 @@ USE [ODONTOIA_DB];
 GO
 
 /* =========================
-   CatalogoSexo
-   ========================= */
-IF NOT EXISTS (SELECT 1 FROM dbo.CatalogoSexo WHERE Codigo = N'F')
-    INSERT INTO dbo.CatalogoSexo (Codigo, Nombre) VALUES (N'F', N'Femenino');
-
-IF NOT EXISTS (SELECT 1 FROM dbo.CatalogoSexo WHERE Codigo = N'M')
-    INSERT INTO dbo.CatalogoSexo (Codigo, Nombre) VALUES (N'M', N'Masculino');
-
-IF NOT EXISTS (SELECT 1 FROM dbo.CatalogoSexo WHERE Codigo = N'O')
-    INSERT INTO dbo.CatalogoSexo (Codigo, Nombre) VALUES (N'O', N'Otro');
-GO
-
-/* =========================
    CatalogoEstadoEvaluacion
    ========================= */
 IF NOT EXISTS (SELECT 1 FROM dbo.CatalogoEstadoEvaluacion WHERE Codigo = N'PENDIENTE')

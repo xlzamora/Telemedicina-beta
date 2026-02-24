@@ -14,20 +14,6 @@ GO
    Catálogos base
    ========================= */
 
-IF OBJECT_ID(N'dbo.CatalogoSexo', N'U') IS NULL
-BEGIN
-    CREATE TABLE dbo.CatalogoSexo
-    (
-        IdSexo          TINYINT IDENTITY(1,1) NOT NULL,
-        Codigo          NVARCHAR(10) NOT NULL,
-        Nombre          NVARCHAR(50) NOT NULL,
-        Activo          BIT NOT NULL CONSTRAINT DF_CatalogoSexo_Activo DEFAULT (1),
-        CONSTRAINT PK_CatalogoSexo PRIMARY KEY (IdSexo),
-        CONSTRAINT UQ_CatalogoSexo_Codigo UNIQUE (Codigo)
-    );
-END
-GO
-
 IF OBJECT_ID(N'dbo.CatalogoEstadoEvaluacion', N'U') IS NULL
 BEGIN
     CREATE TABLE dbo.CatalogoEstadoEvaluacion
@@ -100,7 +86,7 @@ BEGIN
         Apellidos           NVARCHAR(120) NOT NULL,
         Documento           NVARCHAR(30) NOT NULL,
         FechaNacimiento     DATE NULL,
-        IdSexo              TINYINT NULL,
+        Sexo                CHAR(1) NULL,
         Telefono            NVARCHAR(30) NULL,
         Email               NVARCHAR(150) NULL,
         Direccion           NVARCHAR(250) NULL,
@@ -109,10 +95,7 @@ BEGIN
         IsDeleted           BIT NOT NULL CONSTRAINT DF_Pacientes_IsDeleted DEFAULT (0),
         CONSTRAINT PK_Pacientes PRIMARY KEY (IdPaciente),
         CONSTRAINT UQ_Pacientes_Documento UNIQUE (Documento),
-        CONSTRAINT FK_Pacientes_CatalogoSexo FOREIGN KEY (IdSexo)
-            REFERENCES dbo.CatalogoSexo(IdSexo)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION
+        CONSTRAINT CK_Pacientes_Sexo CHECK (Sexo IS NULL OR Sexo IN ('F', 'M', 'O'))
     );
 END
 GO
@@ -126,7 +109,7 @@ BEGIN
         FechaEvaluacion         DATETIME2(3) NOT NULL CONSTRAINT DF_Evaluaciones_FechaEvaluacion DEFAULT (SYSUTCDATETIME()),
         MotivoConsulta          NVARCHAR(500) NOT NULL,
         Observaciones           NVARCHAR(1000) NULL,
-        IdEstadoEvaluacion      TINYINT NOT NULL,
+        EstadoEvaluacion        TINYINT NOT NULL,
         CreatedAt               DATETIME2(3) NOT NULL CONSTRAINT DF_Evaluaciones_CreatedAt DEFAULT (SYSUTCDATETIME()),
         UpdatedAt               DATETIME2(3) NOT NULL CONSTRAINT DF_Evaluaciones_UpdatedAt DEFAULT (SYSUTCDATETIME()),
         IsDeleted               BIT NOT NULL CONSTRAINT DF_Evaluaciones_IsDeleted DEFAULT (0),
@@ -135,7 +118,7 @@ BEGIN
             REFERENCES dbo.Pacientes(IdPaciente)
             ON DELETE NO ACTION
             ON UPDATE NO ACTION,
-        CONSTRAINT FK_Evaluaciones_Estado FOREIGN KEY (IdEstadoEvaluacion)
+        CONSTRAINT FK_Evaluaciones_Estado FOREIGN KEY (EstadoEvaluacion)
             REFERENCES dbo.CatalogoEstadoEvaluacion(IdEstadoEvaluacion)
             ON DELETE NO ACTION
             ON UPDATE NO ACTION
