@@ -1,0 +1,2 @@
+-- 01_create_database.sql
+-- Placeholder SQL script.
