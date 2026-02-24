@@ -1,0 +1,2 @@
+-- 02_create_tables.sql
+-- Placeholder SQL script.

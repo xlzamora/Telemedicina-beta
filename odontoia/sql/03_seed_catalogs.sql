@@ -1,0 +1,2 @@
+-- 03_seed_catalogs.sql
+-- Placeholder SQL script.
